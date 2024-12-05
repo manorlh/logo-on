@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.flip-paypal {
+  direction: ltr;
+  text-align: right;
+}
+
+.rtl .paypal-buttons {
+  flex-direction: row-reverse;
+}
+
+.paypal-container {
+  min-height: 200px;
+  margin-bottom: 1rem;
+}
+
+.paypal-container iframe {
+  max-height: calc(90vh - 300px);
+  overflow-y: auto !important;
+}
+
+.custom-modal {
+  max-height: 80vh !important;
+  margin: 10vh auto !important;
+}
+
+.custom-modal-body {
+  max-height: calc(80vh - 80px) !important;
+  overflow-y: auto !important;
+}
+
+.rtl-toaster [data-sonner-toaster] {
+  direction: rtl;
+}
+
+.rtl-toaster [data-sonner-toast] {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.rtl-toaster [data-sonner-toast] > div {
+  text-align: right;
+  width: 100%;
+}
+
+/* Accessibility styles */
+.high-contrast {
+  filter: contrast(150%);
+}
+
+.grayscale {
+  filter: grayscale(100%);
+}
+
+.readable-font {
+  font-family: Arial, sans-serif !important;
+  letter-spacing: 0.12em;
+  word-spacing: 0.16em;
+  line-height: 1.5;
+}
+
+/* Combine filters if multiple are active */
+.high-contrast.grayscale {
+  filter: contrast(150%) grayscale(100%);
+}
+
+/* Focus styles */
+:focus {
+  outline: 3px solid #005FCC !important;
+  outline-offset: 2px !important;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: white;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Keyboard focus indicator */
+:focus-visible {
+  outline: 3px solid #005FCC !important;
+  outline-offset: 2px !important;
+}
+
+/* High contrast mode adjustments */
+@media (forced-colors: active) {
+  * {
+    forced-color-adjust: none;
+  }
+} 
