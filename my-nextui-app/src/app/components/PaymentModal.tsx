@@ -12,43 +12,10 @@ interface PaymentModalProps {
   imageCount: number;
 }
 
-const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || '';
-
-const initialPayPalOptions = {
-  clientId: PAYPAL_CLIENT_ID,
-  currency: "ILS",
-  intent: "capture",
-  components: "buttons",
-};
-
 export function PaymentModal({ isOpen, onClose, onSuccess, imageCount }: PaymentModalProps) {
-  const { t, language } = useLanguage();
+  const { language, currency, t } = useLanguage();
   const isRTL = language === 'he';
-  const amount = calculatePrice(imageCount);
-
-  const createOrder = (data: any, actions: any) => {
-    return actions.order.create({
-      purchase_units: [
-        {
-          amount: {
-            value: amount.toString(),
-            currency_code: "ILS"
-          },
-          description: `Logo Processing for ${imageCount} images`
-        }
-      ],
-      application_context: {
-        shipping_preference: "NO_SHIPPING"
-      }
-    });
-  };
-
-  const onApprove = (data: any, actions: any) => {
-    return actions.order.capture().then(() => {
-      onSuccess();
-      onClose();
-    });
-  };
+  const amount = calculatePrice(imageCount, currency === 'ILS');
 
   return (
     <Modal 
@@ -78,19 +45,37 @@ export function PaymentModal({ isOpen, onClose, onSuccess, imageCount }: Payment
               </div>
               <div className="flex justify-between items-center mt-2 text-xl font-bold">
                 <span>{t.payment.total}:</span>
-                <span>{formatPrice(amount)}</span>
+                <span>{formatPrice(amount, currency === 'ILS')}</span>
               </div>
             </div>
-            <div className={isRTL ? 'flip-paypal' : ''}>
-              <PayPalScriptProvider options={initialPayPalOptions}>
-                <PayPalButtons 
-                  createOrder={createOrder}
-                  onApprove={onApprove}
-                  style={{ layout: "vertical" }}
-                  forceReRender={[amount, language]}
-                />
-              </PayPalScriptProvider>
-            </div>
+            <PayPalScriptProvider options={{
+              "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
+              currency: currency,
+              intent: "capture",
+              locale: language === 'he' ? 'he_IL' : 'en_US'
+            }}>
+              <PayPalButtons
+                style={{ layout: "vertical" }}
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    intent: "CAPTURE",
+                    purchase_units: [
+                      {
+                        amount: {
+                          value: amount.toString(),
+                          currency_code: currency
+                        },
+                      },
+                    ],
+                  });
+                }}
+                onApprove={(data, actions) => {
+                  return actions.order!.capture().then(() => {
+                    onSuccess();
+                  });
+                }}
+              />
+            </PayPalScriptProvider>
           </div>
         </ModalBody>
       </ModalContent>

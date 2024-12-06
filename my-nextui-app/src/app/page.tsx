@@ -8,7 +8,7 @@ import { useLanguage } from './LanguageContext';
 import { useTheme } from './ThemeContext';
 import { MoonIcon, SunIcon } from './icons';
 import { PaymentModal } from './components/PaymentModal';
-import { calculatePrice } from './utils/pricing';
+import { calculatePrice, formatPrice } from './utils/pricing';
 import { ResultsModal } from './components/ResultsModal';
 import { toast } from 'sonner';
 
@@ -34,7 +34,7 @@ interface PreparedImages {
 }
 
 export default function Home() {
-  const { language, setLanguage, t } = useLanguage();
+  const { language, currency, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
   const [images, setImages] = useState<File[]>([]);
   const [logo, setLogo] = useState<File | null>(null);
@@ -394,10 +394,10 @@ export default function Home() {
             </div>
             <div>
               <p>{t.payment.free}</p>
-              <p>10 ILS</p>
-              <p>15 ILS</p>
-              <p>20 ILS</p>
-              <p>40 ILS</p>
+              <p>{formatPrice(currency === 'ILS' ? 10 : 3, currency === 'ILS')}</p>
+              <p>{formatPrice(currency === 'ILS' ? 15 : 4, currency === 'ILS')}</p>
+              <p>{formatPrice(currency === 'ILS' ? 20 : 5, currency === 'ILS')}</p>
+              <p>{formatPrice(currency === 'ILS' ? 40 : 10, currency === 'ILS')}</p>
             </div>
           </div>
         </Card>

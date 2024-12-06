@@ -9,6 +9,7 @@ import JsonLd from './components/JsonLd';
 import { AccessibilityWidget } from './components/AccessibilityWidget';
 import { Footer } from './components/Footer';
 import { Favicon } from './components/Favicon';
+import { CurrencySelect } from './components/CurrencySelect';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -98,8 +99,11 @@ export default function RootLayout({
               <div className="flex justify-between items-center">
                 <Logo />
                 <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <LanguageSelect />
+                    <CurrencySelect />
+                  </div>
                   <ThemeToggle />
-                  <LanguageSelect />
                 </div>
               </div>
             </div>
