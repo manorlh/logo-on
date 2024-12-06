@@ -76,7 +76,13 @@ export const translations = {
         message: 'האם אתה בטוח שברצונך לסגור? כל התמונות שלא הורדת יאבדו.',
         confirm: 'כן, סגור',
         cancel: 'לא, המשך'
-      }
+      },
+      paymentRequired: 'להורדת יותר מ-2 תמונות נדרש תשלום חד פעמי.',
+      paymentSuccess: 'תודה על התשלום! כעת תוכל להוריד את כל התמונות שלך.',
+      paymentRequired_he: 'להורדת יותר מ-2 תמונות נדרש תשלום חד פעמי.',
+      paymentSuccess_he: 'תודה על התשלום! כעת תוכל להוריד את כל התמונות שלך.',
+      payNow: 'שלם עכשיו',
+      payNow_he: 'שלם עכשיו'
     },
     processing: 'מעבד תמונות...',
     errors: {
@@ -170,7 +176,13 @@ export const translations = {
         message: 'Are you sure you want to close? Any images you haven\'t downloaded will be lost.',
         confirm: 'Yes, Close',
         cancel: 'No, Stay'
-      }
+      },
+      paymentRequired: 'To download more than 2 images, a one-time payment is required.',
+      paymentSuccess: 'Thank you for your payment! You can now download all your images.',
+      paymentRequired_he: 'להורדת יותר מ-2 תמונות נדרש תשלום חד פעמי.',
+      paymentSuccess_he: 'תודה על התשלום! כעת תוכל להוריד את כל התמונות שלך.',
+      payNow: 'Pay Now',
+      payNow_he: 'שלם עכשיו'
     },
     processing: 'Processing images...',
     errors: {

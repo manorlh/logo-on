@@ -252,15 +252,19 @@ export default function Home() {
           logoSize.height
         );
 
+        // Get original file type
+        const mimeType = image.type || 'image/jpeg';
+        const fileExtension = mimeType.split('/')[1];
+
         const blob = await new Promise<Blob>((resolve) => {
           canvas.toBlob((blob) => {
             if (blob) resolve(blob);
-          }, 'image/png');
+          }, mimeType); // Use original mime type
         });
 
         const url = URL.createObjectURL(blob);
         const processedImage = {
-          name: `${image.name}-with-logo.png`,
+          name: `${image.name.split('.')[0]}-with-logo.${fileExtension}`, // Use original extension
           url,
           blob
         };
@@ -287,17 +291,8 @@ export default function Home() {
 
     setIsProcessing(true);
     try {
-      // Prepare images first
       await prepareImages();
-
-      // Check if payment is needed
-      if (images.length > 2 && !paymentComplete) {
-        setShowPayment(true);
-        return;
-      }
-
-      // If no payment needed, show results directly
-      setShowResults(true);
+      setShowResults(true);  // Show results directly
     } catch (error) {
       toast.error(t.errors.processingFailed);
     } finally {
