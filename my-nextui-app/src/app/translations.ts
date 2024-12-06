@@ -31,7 +31,13 @@ export const translations = {
       ratio: 'הפעל שמירה על יחס מידות',
       width: 'רוחב:',
       height: 'גובה:',
-      maintainRatio: 'שמור על יחס מידות'
+      maintainRatio: 'שמור על יחס מידות',
+      title_he: 'גודל הלוגו',
+      sliders_he: 'התאם את מימדי הלוגו באמצעות מחוונים או שדות קלט',
+      ratio_he: 'הפעל שמירה על יחס מקורי כדי לשמור על הפרופורציות',
+      width_he: 'רוחב:',
+      height_he: 'גובה:',
+      maintainRatio_he: 'שמור על יחס מקורי'
     },
     generate: 'צור תמונות',
     language: 'שפה',
@@ -77,6 +83,14 @@ export const translations = {
       noLogo: 'אנא בחר לוגו',
       noImages: 'אנא בחר לפחות תמונה אחת',
       processingFailed: 'אירעה שגיאה בעיבוד התמונות'
+    },
+    logoPosition: {
+      title: 'מיקום הלוגו',
+      position: 'מיקום',
+      drag: 'גרור את הלוגו או השתמש בפקדים למטה',
+      title_he: 'מיקום הלוגו',
+      position_he: 'מיקום',
+      drag_he: 'גרור את הלוגו או השתמש בפקדים למטה'
     }
   },
   en: {
@@ -111,7 +125,13 @@ export const translations = {
       ratio: 'Toggle aspect ratio to maintain proportions',
       width: 'Width:',
       height: 'Height:',
-      maintainRatio: 'Maintain aspect ratio'
+      maintainRatio: 'Maintain aspect ratio',
+      title_he: 'Logo Size',
+      sliders_he: 'Adjust logo dimensions using sliders or input fields',
+      ratio_he: 'Toggle aspect ratio to maintain original proportions',
+      width_he: 'Width:',
+      height_he: 'Height:',
+      maintainRatio_he: 'Maintain aspect ratio'
     },
     generate: 'Generate Images',
     language: 'Language',
@@ -157,6 +177,16 @@ export const translations = {
       noLogo: 'Please select a logo',
       noImages: 'Please select at least one image',
       processingFailed: 'Failed to process images'
+    },
+    logoPosition: {
+      title: 'Logo Position',
+      position: 'Position',
+      drag: 'Drag the logo directly on the image or use controls below',
+      instructions: 'Use sliders or enter exact pixel values for precise positioning',
+      title_he: 'מיקום הלוגו',
+      position_he: 'מיקום',
+      drag_he: 'גרור את הלוגו ישירות על התמונה או השתמש בפקדים למטה',
+      instructions_he: 'השתמש במחוונים או הזן ערכי פיקסלים מדויקים למיקום מדויק'
     }
   }
 }; 
