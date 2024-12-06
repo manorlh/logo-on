@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
     const lang = pathname.slice(1);
     const response = NextResponse.redirect(new URL('/', request.url));
     
-    // Set language in cookie
+    // Always update the cookie with the new language choice
     response.cookies.set('NEXT_LOCALE', lang, {
       path: '/',
       sameSite: 'strict',
