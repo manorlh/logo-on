@@ -1,7 +1,8 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { translations } from './translations';
+import Cookies from 'js-cookie';
 
 type Language = 'he' | 'en';
 type Currency = 'ILS' | 'USD';
@@ -20,9 +21,18 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('he');
   const [currency, setCurrency] = useState<Currency>('ILS');
 
+  useEffect(() => {
+    const savedLang = Cookies.get('NEXT_LOCALE');
+    if (savedLang === 'en' || savedLang === 'he') {
+      setLanguage(savedLang);
+      setCurrency(savedLang === 'he' ? 'ILS' : 'USD');
+    }
+  }, []);
+
   const handleLanguageChange = (newLang: Language) => {
     setLanguage(newLang);
     setCurrency(newLang === 'he' ? 'ILS' : 'USD');
+    Cookies.set('NEXT_LOCALE', newLang, { expires: 365 });
   };
 
   const value = {

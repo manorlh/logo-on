@@ -2,15 +2,22 @@
 
 import { Select, SelectItem } from "@nextui-org/react";
 import { useLanguage } from "../LanguageContext";
+import { useRouter } from 'next/navigation';
 
 export function LanguageSelect() {
   const { language, setLanguage } = useLanguage();
+  const router = useRouter();
   
+  const handleLanguageChange = (value: string) => {
+    const newLang = value as 'he' | 'en';
+    router.push(`/${newLang}`);
+  };
+
   return (
     <Select
       selectedKeys={[language]}
       value={language}
-      onChange={(e) => setLanguage(e.target.value as 'he' | 'en')}
+      onChange={(e) => handleLanguageChange(e.target.value)}
       size="sm"
       className="w-24"
     >

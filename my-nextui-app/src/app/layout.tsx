@@ -10,59 +10,64 @@ import { AccessibilityWidget } from './components/AccessibilityWidget';
 import { Footer } from './components/Footer';
 import { Favicon } from './components/Favicon';
 import { CurrencySelect } from './components/CurrencySelect';
+import { LanguageWrapper } from './components/LanguageWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: {
-    default: 'הוספת לוגו לתמונות | YourLogoHere.app',
-    template: '%s | YourLogoHere.app'
-  },
-  description: 'כלי חינמי להוספת לוגו למספר תמונות בו זמנית. הוסף את הלוגו שלך בקלות ובמהירות לכל התמונות שלך',
-  keywords: [
-    'הוספת לוגו',
-    'עיבוד תמונות',
-    'ווטרמרק',
-    'לוגו לתמונות',
-    'עיצוב לוגו',
-    'עריכת תמונות',
-    'כלי עיצוב',
-    'עיצוב גרפי',
-    'watermark',
-    'logo placement',
-    'image processing'
-  ],
-  authors: [{ name: 'YourLogoHere.app' }],
-  creator: 'YourLogoHere.app',
-  publisher: 'YourLogoHere.app',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
   metadataBase: new URL('https://yourlogohere.app'),
   alternates: {
     canonical: '/',
     languages: {
-      'en-US': '/en',
-      'he-IL': '/he',
+      'en': '/en',
+      'he': '/he',
     },
   },
-  openGraph: {
-    title: 'הוספת לוגו לתמונות | YourLogoHere.app',
-    description: 'כלי חינמי להוספת לוגו למספר תמונות בו זמנית. הוסף את הלוגו שלך בקלות ובמהירות לכל התמונות שלך',
-    url: 'https://yourlogohere.app',
-    siteName: 'YourLogoHere.app',
-    images: [
-      {
-        url: 'https://yourlogohere.app/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'YourLogoHere.app - הוספת לוגו לתמונות',
-      },
+  'en': {
+    title: {
+      default: 'Add Logo to Images | YourLogoHere.app',
+      template: '%s | YourLogoHere.app'
+    },
+    description: 'Free tool to add your logo to multiple images at once. Easily and quickly add your logo to all your images',
+    keywords: [
+      'add logo',
+      'image processing',
+      'watermark',
+      'logo placement',
+      'logo design',
+      'image editing',
+      'design tools',
+      'graphic design',
+      'batch processing',
+      'image branding'
     ],
-    locale: 'he_IL',
-    type: 'website',
+    openGraph: {
+      title: 'Add Logo to Images | YourLogoHere.app',
+      description: 'Free tool to add your logo to multiple images at once',
+      locale: 'en_US',
+    }
+  },
+  'he': {
+    title: {
+      default: 'הוספת לוגו לתמונות | YourLogoHere.app',
+      template: '%s | YourLogoHere.app'
+    },
+    description: 'כלי חינמי להוספת לוגו למספר תמונות בו זמנית. הוסף את הלוגו שלך בקלות ובמהירות לכל התמונות שלך',
+    keywords: [
+      'הוספת לוגו',
+      'עיבוד תמונות',
+      'ווטרמרק',
+      'לוגו לתמונות',
+      'עיצוב לוגו',
+      'עריכת תמונות',
+      'כלי עיצוב',
+      'עיצוב גרפי'
+    ],
+    openGraph: {
+      title: 'הוספת לוגו לתמונות | YourLogoHere.app',
+      description: 'כלי חינמי להוספת לוגו למספר תמונות בו זמנית',
+      locale: 'he_IL',
+    }
   },
   robots: {
     index: true,
@@ -86,7 +91,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="he" className="dark">
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="shortcut icon" href="/favicon.ico" />
@@ -94,26 +99,28 @@ export default function RootLayout({
       <body className={`${inter.className} dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col`}>
         <JsonLd />
         <Providers>
-          <header className="border-b dark:border-gray-800">
-            <div className="container mx-auto p-4">
-              <div className="flex justify-between items-center">
-                <Logo />
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <LanguageSelect />
-                    <CurrencySelect />
+          <LanguageWrapper>
+            <header className="border-b dark:border-gray-800">
+              <div className="container mx-auto p-4">
+                <div className="flex justify-between items-center">
+                  <Logo />
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <LanguageSelect />
+                      <CurrencySelect />
+                    </div>
+                    <ThemeToggle />
                   </div>
-                  <ThemeToggle />
                 </div>
               </div>
-            </div>
-          </header>
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
-          <CustomToaster />
-          <AccessibilityWidget />
+            </header>
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <CustomToaster />
+            <AccessibilityWidget />
+          </LanguageWrapper>
         </Providers>
       </body>
     </html>
