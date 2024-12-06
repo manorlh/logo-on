@@ -30,6 +30,7 @@ export const metadata = {
     },
     description: 'Free tool to add your logo to multiple images at once. Easily and quickly add your logo to all your images',
     keywords: [
+      'add logo to images',
       'add logo',
       'image processing',
       'watermark',
@@ -53,7 +54,8 @@ export const metadata = {
       template: '%s | YourLogoHere.app'
     },
     description: 'כלי חינמי להוספת לוגו למספר תמונות בו זמנית. הוסף את הלוגו שלך בקלות ובמהירות לכל התמונות שלך',
-    keywords: [
+    keywords: [ 
+      'הדבקת לוגו',
       'הוספת לוגו',
       'עיבוד תמונות',
       'ווטרמרק',
