@@ -8,8 +8,20 @@ import { PaymentModal } from "./PaymentModal";
 interface ResultsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  processedImages: Array<{ name: string; url: string; blob: Blob }>;
+  processedImages: Array<{
+    name: string;
+    url: string;
+    previewUrl: string;
+    blob: Blob;
+  }>;
   zipBlob: Blob | null;
+}
+
+interface ProcessedImage {
+  name: string;
+  url: string;  // Low res preview URL
+  blob: Blob;   // Original quality blob
+  previewUrl: string;  // Add this for low res preview
 }
 
 export function ResultsModal({ isOpen, onClose, processedImages, zipBlob }: ResultsModalProps) {
@@ -113,11 +125,16 @@ export function ResultsModal({ isOpen, onClose, processedImages, zipBlob }: Resu
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {processedImages.map((image, index) => (
                   <div key={index} className="border rounded-lg p-4">
-                    <img
-                      src={image.url}
-                      alt={`Processed ${index + 1}`}
-                      className="w-full h-auto mb-2"
-                    />
+                    <div className="relative">
+                      <img
+                        src={image.previewUrl}
+                        alt={`Processed ${index + 1}`}
+                        className="w-full h-auto mb-2"
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/30 text-white text-center text-xs">
+                        yourlogohere.app
+                      </div>
+                    </div>
                     <Button
                       color="secondary"
                       onClick={() => handleDownload(image.url, image.name)}

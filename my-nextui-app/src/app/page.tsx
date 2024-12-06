@@ -235,16 +235,17 @@ export default function Home() {
     const logoImg = await createImageBitmap(logo!);
 
     for (const image of images) {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
+      // Create high quality version
+      const highResCanvas = document.createElement('canvas');
+      const highResCtx = highResCanvas.getContext('2d');
       const img = await createImageBitmap(image);
 
-      canvas.width = img.width;
-      canvas.height = img.height;
+      highResCanvas.width = img.width;
+      highResCanvas.height = img.height;
 
-      if (ctx) {
-        ctx.drawImage(img, 0, 0);
-        ctx.drawImage(
+      if (highResCtx) {
+        highResCtx.drawImage(img, 0, 0);
+        highResCtx.drawImage(
           logoImg,
           logoPosition.x,
           logoPosition.y,
@@ -252,25 +253,55 @@ export default function Home() {
           logoSize.height
         );
 
+        // Create low resolution preview
+        const previewCanvas = document.createElement('canvas');
+        const previewCtx = previewCanvas.getContext('2d');
+        const maxPreviewSize = 400; // Max preview dimension
+        
+        // Calculate preview dimensions
+        const scale = Math.min(maxPreviewSize / img.width, maxPreviewSize / img.height);
+        previewCanvas.width = img.width * scale;
+        previewCanvas.height = img.height * scale;
+
+        if (previewCtx) {
+          // Enable image smoothing for better preview quality
+          previewCtx.imageSmoothingEnabled = true;
+          previewCtx.imageSmoothingQuality = 'medium';
+          
+          // Draw scaled down version
+          previewCtx.drawImage(highResCanvas, 0, 0, previewCanvas.width, previewCanvas.height);
+        }
+
         // Get original file type
         const mimeType = image.type || 'image/jpeg';
         const fileExtension = mimeType.split('/')[1];
 
-        const blob = await new Promise<Blob>((resolve) => {
-          canvas.toBlob((blob) => {
+        // Create high quality blob
+        const highResBlob = await new Promise<Blob>((resolve) => {
+          highResCanvas.toBlob((blob) => {
             if (blob) resolve(blob);
-          }, mimeType); // Use original mime type
+          }, mimeType, 1.0); // Use maximum quality for download
         });
 
-        const url = URL.createObjectURL(blob);
+        // Create low quality preview blob
+        const previewBlob = await new Promise<Blob>((resolve) => {
+          previewCanvas.toBlob((blob) => {
+            if (blob) resolve(blob);
+          }, 'image/jpeg', 0.6); // Use lower quality for preview
+        });
+
+        const highResUrl = URL.createObjectURL(highResBlob);
+        const previewUrl = URL.createObjectURL(previewBlob);
+
         const processedImage = {
-          name: `${image.name.split('.')[0]}-with-logo.${fileExtension}`, // Use original extension
-          url,
-          blob
+          name: `${image.name.split('.')[0]}-with-logo.${fileExtension}`,
+          url: highResUrl,  // Original quality for download
+          previewUrl: previewUrl,  // Low quality for preview
+          blob: highResBlob
         };
         
         processedImgs.push(processedImage);
-        zip.file(processedImage.name, blob);
+        zip.file(processedImage.name, highResBlob);
       }
     }
 

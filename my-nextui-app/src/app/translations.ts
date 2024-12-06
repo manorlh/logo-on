@@ -77,7 +77,7 @@ export const translations = {
         confirm: 'כן, סגור',
         cancel: 'לא, המשך'
       },
-      paymentRequired: 'להורדת יותר מ-2 תמונות נדרש תשלום חד פעמי.',
+      paymentRequired: 'להורדת יותר מ-2 תמונות וללא החותמת שלנו נדרש תשלום חד פעמי.',
       paymentSuccess: 'תודה על התשלום! כעת תוכל להוריד את כל התמונות שלך.',
       paymentRequired_he: 'להורדת יותר מ-2 תמונות נדרש תשלום חד פעמי.',
       paymentSuccess_he: 'תודה על התשלום! כעת תוכל להוריד את כל התמונות שלך.',
@@ -177,9 +177,9 @@ export const translations = {
         confirm: 'Yes, Close',
         cancel: 'No, Stay'
       },
-      paymentRequired: 'To download more than 2 images, a one-time payment is required.',
+      paymentRequired: 'To download more than 2 images and without watermark, a one-time payment is required.',
       paymentSuccess: 'Thank you for your payment! You can now download all your images.',
-      paymentRequired_he: 'להורדת יותר מ-2 תמונות נדרש תשלום חד פעמי.',
+      paymentRequired_he: 'להורדת יותר מ-2 תמונות וללא החותמת שלנו נדרש תשלום חד פעמי.',
       paymentSuccess_he: 'תודה על התשלום! כעת תוכל להוריד את כל התמונות שלך.',
       payNow: 'Pay Now',
       payNow_he: 'שלם עכשיו'
