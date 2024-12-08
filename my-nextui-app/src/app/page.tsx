@@ -53,6 +53,7 @@ export default function Home() {
   const [showResults, setShowResults] = useState(false);
   const [preparedImages, setPreparedImages] = useState<PreparedImages | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [canvasDimensions, setCanvasDimensions] = useState<Size>({ width: 0, height: 0 });
 
   // Load preview image when first image is selected
   useEffect(() => {
@@ -211,8 +212,16 @@ export default function Home() {
     const logoImage = new Image();
 
     mainImage.onload = () => {
+      // Set canvas dimensions
       canvas.width = mainImage.width;
       canvas.height = mainImage.height;
+      
+      // Update maxWidth and maxHeight state based on actual image dimensions
+      setCanvasDimensions({
+        width: mainImage.width,
+        height: mainImage.height
+      });
+
       ctx.drawImage(mainImage, 0, 0);
 
       logoImage.onload = () => {
@@ -520,14 +529,15 @@ export default function Home() {
                 maintainAspectRatio={maintainAspectRatio}
                 onSizeChange={handleSizeChange}
                 onPositionChange={(value, axis) => {
-                  setLogoPosition(prev => ({
-                    ...prev,
+                  const newPosition = {
+                    ...logoPosition,
                     [axis]: value
-                  }));
+                  };
+                  setLogoPosition(newPosition);
                 }}
                 onAspectRatioChange={setMaintainAspectRatio}
-                maxWidth={1000}
-                maxHeight={1000}
+                maxWidth={canvasDimensions.width}
+                maxHeight={canvasDimensions.height}
               />
             </Card>
           </div>

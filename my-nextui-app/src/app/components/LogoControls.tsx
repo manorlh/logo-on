@@ -27,9 +27,17 @@ export function LogoControls({
   const { t } = useLanguage();
 
   const handlePositionChange = (value: number, axis: 'x' | 'y') => {
-    const roundedValue = Math.round(value);
-    onPositionChange(roundedValue, axis);
+    const maxPos = axis === 'x' ? 
+      Math.max(0, maxWidth - logoSize.width) : 
+      Math.max(0, maxHeight - logoSize.height);
+    
+    const boundedValue = Math.max(0, Math.min(Math.round(value), maxPos));
+    onPositionChange(boundedValue, axis);
   };
+
+  // Calculate max positions for sliders
+  const maxPosX = Math.max(0, maxWidth - logoSize.width);
+  const maxPosY = Math.max(0, maxHeight - logoSize.height);
 
   return (
     <div className="flex flex-col gap-6">
@@ -104,7 +112,7 @@ export function LogoControls({
             <Slider
               size="sm"
               step={1}
-              maxValue={maxWidth - logoSize.width}
+              maxValue={maxPosX}
               minValue={0}
               value={logoPosition.x}
               onChange={(value) => handlePositionChange(Number(value), 'x')}
@@ -116,7 +124,7 @@ export function LogoControls({
               onChange={(e) => handlePositionChange(Number(e.target.value), 'x')}
               className="w-24"
               min={0}
-              max={maxWidth - logoSize.width}
+              max={maxPosX}
             />
           </div>
           <div className="flex items-center gap-2">
@@ -124,7 +132,7 @@ export function LogoControls({
             <Slider
               size="sm"
               step={1}
-              maxValue={maxHeight - logoSize.height}
+              maxValue={maxPosY}
               minValue={0}
               value={logoPosition.y}
               onChange={(value) => handlePositionChange(Number(value), 'y')}
@@ -136,7 +144,7 @@ export function LogoControls({
               onChange={(e) => handlePositionChange(Number(e.target.value), 'y')}
               className="w-24"
               min={0}
-              max={maxHeight - logoSize.height}
+              max={maxPosY}
             />
           </div>
         </div>
