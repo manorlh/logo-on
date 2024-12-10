@@ -40,7 +40,12 @@ export const metadata = {
       'design tools',
       'graphic design',
       'batch processing',
-      'image branding'
+      'image branding',
+      'real estate marketing',
+      'real estate agent tools',
+      'property listing images',
+      'real estate branding',
+      'realtor tools'
     ],
     openGraph: {
       title: 'Add Logo to Images | YourLogoHere.app',
@@ -63,7 +68,14 @@ export const metadata = {
       'עיצוב לוגו',
       'עריכת תמונות',
       'כלי עיצוב',
-      'עיצוב גרפי'
+      'עיצוב גרפי',
+      'כלי למתווכים',
+      'כלים למשרדי תיווך',
+      'עיצוב תמונות לנכסים',
+      'מיתוג למתווכים',
+      'עיבוד תמונות לנדלן',
+      'כלי שיווק לנדלן',
+      'מיתוג משרד תיווך'
     ],
     openGraph: {
       title: 'הוספת לוגו לתמונות | YourLogoHere.app',
