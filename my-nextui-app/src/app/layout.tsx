@@ -25,7 +25,7 @@ export const metadata = {
   },
   'en': {
     title: {
-      default: 'Add Logo to Images | YourLogoHere.app',
+      default: 'YourLogoHere.app | Add Logo to Images',
       template: '%s | YourLogoHere.app'
     },
     description: 'Free tool to add your logo to multiple images at once. Easily and quickly add your logo to all your images',
@@ -50,7 +50,7 @@ export const metadata = {
   },
   'he': {
     title: {
-      default: 'הוספת לוגו לתמונות | YourLogoHere.app',
+      default: 'YourLogoHere.app | הוספת לוגו לתמונות',
       template: '%s | YourLogoHere.app'
     },
     description: 'כלי חינמי להוספת לוגו למספר תמונות בו זמנית. הוסף את הלוגו שלך בקלות ובמהירות לכל התמונות שלך',
@@ -85,6 +85,24 @@ export const metadata = {
   verification: {
     google: 'your-google-verification-code',
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180' }
+    ],
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/safari-pinned-tab.svg',
+        color: '#5bbad5'
+      }
+    ]
+  },
+  manifest: '/manifest.json',
 };
 
 export default function RootLayout({
