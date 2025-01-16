@@ -1,38 +1,115 @@
+import { Metadata } from 'next';
 import { Providers } from "../providers";
 import { Inter } from 'next/font/google';
 import '../globals.css';
+import { CustomToaster } from '../components/CustomToaster';
+import JsonLd from '../components/JsonLd';
+import { AccessibilityWidget } from '../components/AccessibilityWidget';
+import { Footer } from '../components/Footer';
+import { LanguageWrapper } from '../components/LanguageWrapper';
+import { Analytics } from "@vercel/analytics/react";
+import { metadata as siteMetadata } from '../metadata';
 
-const inter = Inter({ 
-  subsets: ['latin'],
-  // For Arabic text, we'll use system fonts
-  variable: '--font-inter'
-});
+const inter = Inter({ subsets: ['latin'] });
 
-export default function LangLayout({
-  children,
-  params
-}: {
+type Props = {
   children: React.ReactNode;
-  params: { lang: 'en' | 'he' | 'ar' }
-}) {
+  params: { lang: string };
+};
+
+type LangMetadata = {
+  title: { default: string; template: string };
+  description: string;
+  keywords: string[];
+  openGraph: {
+    type: string;
+    title: string;
+    description: string;
+    locale: string;
+    url: string;
+    siteName: string;
+    images: Array<{
+      url: string;
+      width: number;
+      height: number;
+      alt: string;
+    }>;
+  };
+  twitter: {
+    card: string;
+    title: string;
+    description: string;
+    images: string[];
+  };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const lang = params.lang as keyof typeof siteMetadata;
+  const langMetadata = (siteMetadata[lang] || siteMetadata.en) as LangMetadata;
+  
+  return {
+    metadataBase: siteMetadata.metadataBase,
+    title: langMetadata.title.default,
+    description: langMetadata.description,
+    keywords: langMetadata.keywords,
+    openGraph: langMetadata.openGraph,
+    twitter: langMetadata.twitter,
+    alternates: {
+      canonical: `${siteMetadata.metadataBase}/${params.lang}`,
+      languages: siteMetadata.alternates.languages
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      }
+    },
+    icons: siteMetadata.icons,
+    manifest: siteMetadata.manifest,
+    verification: siteMetadata.verification
+  };
+}
+
+export default function LangLayout({ children, params }: Props) {
   const isRTL = params.lang === 'he' || params.lang === 'ar';
+  const lang = params.lang as keyof typeof siteMetadata;
+  const langMetadata = (siteMetadata[lang] || siteMetadata.en) as LangMetadata;
   
   return (
-    <html lang={params.lang} dir={isRTL ? 'rtl' : 'ltr'} className={`dark ${inter.variable}`}>
+    <html lang={params.lang} dir={isRTL ? 'rtl' : 'ltr'} className={`dark ${inter.className}`}>
       <head>
-        <link
-          rel="preload"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
-          as="style"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
-        />
+        {siteMetadata.icons.icon.map((icon, i) => (
+          <link key={i} rel="icon" {...icon} />
+        ))}
+        {siteMetadata.icons.apple.map((icon, i) => (
+          <link key={i} rel="apple-touch-icon" {...icon} />
+        ))}
+        {siteMetadata.icons.other.map((icon, i) => (
+          <link key={i} {...icon} />
+        ))}
       </head>
-      <body className="dark:bg-gray-900 dark:text-gray-100 font-sans">
+      <body className="dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+        <JsonLd />
+        <Analytics />
         <Providers>
-          {children}
+          <LanguageWrapper>
+            <header className="py-4 px-6">
+              <h1 className="text-3xl font-bold text-center">
+                {langMetadata.title.default.split('|')[0].trim()}
+              </h1>
+            </header>
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <CustomToaster />
+            <AccessibilityWidget />
+          </LanguageWrapper>
         </Providers>
       </body>
     </html>
