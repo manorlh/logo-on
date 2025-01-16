@@ -5,7 +5,7 @@ import { useLanguage } from '../LanguageContext';
 
 export function Logo({ className = "", size = 40 }: { className?: string, size?: number }) {
   const { language } = useLanguage();
-  const isRTL = language === 'he';
+  const isRTL = language === 'he' || language === 'ar';
 
   return (
     <Link href="/" className={`flex items-center gap-2 ${className} hover:opacity-80 transition-opacity`}>

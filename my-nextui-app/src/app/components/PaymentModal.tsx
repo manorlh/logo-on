@@ -14,7 +14,7 @@ interface PaymentModalProps {
 
 export function PaymentModal({isOpen, onClose, onSuccess, imageCount}: PaymentModalProps) {
     const {language, currency, t} = useLanguage();
-    const isRTL = language === 'he';
+    const isRTL = language === 'he' || language === 'ar';
     const amount = calculatePrice(imageCount, currency === 'ILS');
 
     const getPayPalLocale = (language: string) => {

@@ -5,7 +5,7 @@ import { Card } from '@nextui-org/react';
 
 export function PrivacyPolicy() {
   const { language } = useLanguage();
-  const isRTL = language === 'he';
+  const isRTL = language === 'he' || language === 'ar';
 
   return (
     <Card className="p-6">

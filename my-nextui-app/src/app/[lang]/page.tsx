@@ -59,6 +59,7 @@ export default function Page({ params }: { params: { lang: string } }) {
   const [preparedImages, setPreparedImages] = useState<PreparedImages | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [canvasDimensions, setCanvasDimensions] = useState<Size>({ width: 0, height: 0 });
+  const isRTL = language === 'he' || language === 'ar';
 
   // Load preview image when first image is selected
   useEffect(() => {
@@ -411,7 +412,7 @@ export default function Page({ params }: { params: { lang: string } }) {
   }, [preparedImages]);
 
   return (
-    <div className="min-h-screen flex flex-col" dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div className="min-h-screen flex flex-col" dir={isRTL ? 'rtl' : 'ltr'}>
       <header className="border-b dark:border-gray-800">
         <div className="container mx-auto p-4">
           <div className="flex justify-between items-center">

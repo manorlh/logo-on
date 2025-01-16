@@ -28,7 +28,7 @@ export function ResultsModal({ isOpen, onClose, processedImages, zipBlob }: Resu
   const { language, t } = useLanguage();
   const [showPayment, setShowPayment] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
-  const isRTL = language === 'he';
+  const isRTL = language === 'he' || language === 'ar';
   const needsPayment = processedImages.length > 2 && !paymentComplete;
 
   const handleDownload = (url: string, filename: string) => {
@@ -83,7 +83,7 @@ export function ResultsModal({ isOpen, onClose, processedImages, zipBlob }: Resu
         }}
       >
         <ModalContent>
-          <ModalHeader className={`flex flex-col ${isRTL ? "items-end" : "items-start"}`}>
+          <ModalHeader className={`flex flex-col ${isRTL ? "items-start" : "items-end"}`}>
             {t.results.title}
           </ModalHeader>
           <ModalBody className="gap-4">

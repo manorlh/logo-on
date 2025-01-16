@@ -9,7 +9,10 @@ import { Footer } from '../components/Footer';
 import { Analytics } from "@vercel/analytics/react";
 import { metadata as siteMetadata } from '../metadata';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter'
+});
 
 type Props = {
   children: React.ReactNode;
@@ -80,7 +83,7 @@ export default function LangLayout({ children, params }: Props) {
   const langMetadata = (siteMetadata[lang] || siteMetadata.en) as LangMetadata;
   
   return (
-    <html lang={params.lang} dir={isRTL ? 'rtl' : 'ltr'} className={`dark ${inter.className}`}>
+    <html lang={params.lang} dir={isRTL ? 'rtl' : 'ltr'} className={`${isRTL ? 'rtl' : 'ltr'} dark ${inter.variable}`}>
       <head>
         {siteMetadata.icons.icon.map((icon, i) => (
           <link key={i} rel="icon" {...icon} />
@@ -91,8 +94,21 @@ export default function LangLayout({ children, params }: Props) {
         {siteMetadata.icons.other.map((icon, i) => (
           <link key={i} {...icon} />
         ))}
+        {isRTL && (
+          <>
+            <link
+              rel="preload"
+              href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
+              as="style"
+            />
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap"
+            />
+          </>
+        )}
       </head>
-      <body className="dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col">
+      <body className={`dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col ${isRTL ? 'font-arabic' : 'font-sans'}`}>
         <JsonLd />
         <Analytics />
         <Providers>

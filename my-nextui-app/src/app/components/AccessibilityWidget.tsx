@@ -8,7 +8,7 @@ export function AccessibilityWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const { theme } = useTheme();
   const { language } = useLanguage();
-  const isRTL = language === 'he';
+  const isRTL = language === 'he' || language === 'ar';
   const widgetRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

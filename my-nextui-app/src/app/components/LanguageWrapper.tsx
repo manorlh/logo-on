@@ -8,9 +8,10 @@ interface LanguageWrapperProps {
 
 export function LanguageWrapper({ children }: LanguageWrapperProps) {
   const { language } = useLanguage();
+  const isRTL = language === 'he' || language === 'ar';
   
   return (
-    <div dir={language === 'he' ? 'rtl' : 'ltr'}>
+    <div dir={isRTL ? 'rtl' : 'ltr'}>
       {children}
     </div>
   );
