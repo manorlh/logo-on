@@ -2,11 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://yourlogohere.app/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://yourlogohere.app/en"/>
-    <xhtml:link rel="alternate" hreflang="he" href="https://yourlogohere.app/he"/>
-    <lastmod>2024-02-20</lastmod>
+    <loc>https://yourlogohere.app/en</loc>
+    <lastmod>2024-03-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="he" href="https://yourlogohere.app/he"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://yourlogohere.app/ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourlogohere.app/en"/>
+  </url>
+  <url>
+    <loc>https://yourlogohere.app/he</loc>
+    <lastmod>2024-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yourlogohere.app/en"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://yourlogohere.app/ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourlogohere.app/en"/>
+  </url>
+  <url>
+    <loc>https://yourlogohere.app/ar</loc>
+    <lastmod>2024-03-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://yourlogohere.app/en"/>
+    <xhtml:link rel="alternate" hreflang="he" href="https://yourlogohere.app/he"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://yourlogohere.app/en"/>
   </url>
 </urlset> 

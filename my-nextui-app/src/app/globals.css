@@ -98,4 +98,73 @@
   * {
     forced-color-adjust: none;
   }
+}
+
+/* Add Arabic font support */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap');
+
+/* Add Arabic font for RTL content */
+[dir="rtl"] {
+  font-family: 'Noto Sans Arabic', system-ui, sans-serif;
+}
+
+/* Adjust RTL specific layouts */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-right: 1rem;
+  margin-left: 0;
+}
+
+/* Add RTL-specific styles for image preview */
+[dir="rtl"] .image-preview-container {
+  direction: rtl;
+}
+
+[dir="rtl"] .control-panel {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .slider-container {
+  direction: ltr; /* Keep sliders LTR for better UX */
+  text-align: right;
+}
+
+/* RTL adjustments for modals */
+[dir="rtl"] .modal-header {
+  text-align: right;
+}
+
+[dir="rtl"] .modal-footer {
+  flex-direction: row-reverse;
+}
+
+/* RTL adjustments for PayPal buttons */
+[dir="rtl"] .paypal-buttons-container {
+  direction: ltr;
+  text-align: center;
+}
+
+/* PayPal button container in RTL */
+[dir="rtl"] .paypal-container {
+  direction: ltr !important;
+  text-align: center !important;
+}
+
+/* Force PayPal buttons to stay LTR in RTL layout */
+[dir="rtl"] .paypal-buttons {
+  direction: ltr !important;
+}
+
+/* Adjust modal content in RTL */
+[dir="rtl"] .modal-content {
+  text-align: right;
+}
+
+/* Ensure numbers stay LTR in RTL layout */
+[dir="rtl"] .number {
+  direction: ltr;
+  display: inline-block;
 } 

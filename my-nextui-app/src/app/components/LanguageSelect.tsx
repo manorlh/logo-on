@@ -10,7 +10,7 @@ export function LanguageSelect() {
   const router = useRouter();
   
   const handleLanguageChange = (value: string) => {
-    const newLang = value as 'he' | 'en';
+    const newLang = value as 'he' | 'en' | 'ar';
     
     // Update cookie
     Cookies.set('NEXT_LOCALE', newLang, { expires: 365 });
@@ -25,13 +25,13 @@ export function LanguageSelect() {
   return (
     <Select
       selectedKeys={[language]}
-      value={language}
       onChange={(e) => handleLanguageChange(e.target.value)}
       size="sm"
       className="w-24"
     >
       <SelectItem key="he" value="he">עברית</SelectItem>
       <SelectItem key="en" value="en">English</SelectItem>
+      <SelectItem key="ar" value="ar">العربية</SelectItem>
     </Select>
   );
 } 

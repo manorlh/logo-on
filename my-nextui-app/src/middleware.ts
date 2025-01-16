@@ -4,12 +4,16 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Handle /he and /en routes
+  // Redirect root to /en
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL('/en', request.url));
+  }
+
+  // Set language cookie for /he and /en routes without redirecting
   if (pathname === '/he' || pathname === '/en') {
     const lang = pathname.slice(1);
-    const response = NextResponse.redirect(new URL('/', request.url));
+    const response = NextResponse.next();
     
-    // Always update the cookie with the new language choice
     response.cookies.set('NEXT_LOCALE', lang, {
       path: '/',
       sameSite: 'strict',
@@ -23,5 +27,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/he', '/en']
+  matcher: ['/', '/he', '/en']
 } 

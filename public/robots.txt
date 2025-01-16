@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://yourlogohere.app/sitemap.xml
+
+# Language specific paths
+Allow: /en/
+Allow: /he/
+Allow: /ar/
+
+# Disallow
+Disallow: /api/
+Disallow: /_next/
+Disallow: /*?* 

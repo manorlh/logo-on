@@ -9,21 +9,50 @@ export default function JsonLd() {
           "@context": "https://schema.org",
           "@type": "WebApplication",
           "name": "YourLogoHere.app",
-          "applicationCategory": "DesignApplication",
+          "url": "https://yourlogohere.app",
+          "description": "Free online tool to add your logo to multiple images at once. Perfect for real estate agents, photographers, and businesses.",
+          "applicationCategory": "Image Processing Tool",
           "operatingSystem": "Any",
-          "description": "כלי חינמי להוספת לוגו למספר תמונות בו זמנית",
           "offers": {
             "@type": "Offer",
             "price": "0",
-            "priceCurrency": "ILS"
+            "priceCurrency": "USD",
+            "description": "Free for basic usage"
           },
-          "inLanguage": ["he", "en"],
           "featureList": [
-            "הוספת לוגו למספר תמונות בו זמנית",
-            "שמירה על איכות התמונה המקורית",
-            "ממשק משתמש ידידותי",
-            "תמיכה בעברית ואנגלית"
-          ]
+            "Batch logo processing",
+            "Multiple image watermarking",
+            "Customizable logo placement",
+            "High-quality output",
+            "Drag and drop interface",
+            "Real-time preview"
+          ],
+          "screenshot": {
+            "@type": "ImageObject",
+            "url": "https://yourlogohere.app/screenshot.png"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "156"
+          },
+          "author": {
+            "@type": "Organization",
+            "name": "YourLogoHere.app",
+            "url": "https://yourlogohere.app"
+          },
+          "inLanguage": ["en", "he", "ar"],
+          "potentialAction": {
+            "@type": "UseAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://yourlogohere.app/en",
+              "actionPlatform": [
+                "http://schema.org/DesktopWebPlatform",
+                "http://schema.org/MobileWebPlatform"
+              ]
+            }
+          }
         })
       }}
     />

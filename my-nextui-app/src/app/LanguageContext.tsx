@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { translations } from './translations';
 import Cookies from 'js-cookie';
 
-type Language = 'he' | 'en';
+type Language = 'he' | 'en' | 'ar';
 type Currency = 'ILS' | 'USD';
 
 interface LanguageContextType {
@@ -23,7 +23,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const savedLang = Cookies.get('NEXT_LOCALE');
-    if (savedLang === 'en' || savedLang === 'he') {
+    if (savedLang === 'en' || savedLang === 'he' || savedLang === 'ar') {
       setLanguage(savedLang);
       setCurrency(savedLang === 'he' ? 'ILS' : 'USD');
     }

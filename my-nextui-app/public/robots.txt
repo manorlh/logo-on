@@ -1,3 +1,13 @@
 User-agent: *
 Allow: /
-Sitemap: https://yourlogohere.app/sitemap.xml 
+
+# Sitemaps
+Sitemap: https://yourlogohere.app/sitemap.xml
+
+# Language-specific paths
+Allow: /en
+Allow: /he
+Allow: /ar
+
+# Optimize crawling
+Crawl-delay: 1 

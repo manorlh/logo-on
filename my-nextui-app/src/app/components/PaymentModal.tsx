@@ -17,6 +17,17 @@ export function PaymentModal({isOpen, onClose, onSuccess, imageCount}: PaymentMo
     const isRTL = language === 'he';
     const amount = calculatePrice(imageCount, currency === 'ILS');
 
+    const getPayPalLocale = (language: string) => {
+        switch (language) {
+            case 'he':
+                return 'he_IL';
+            case 'ar':
+                return 'ar_EG';  // Using Egyptian Arabic as it's widely understood
+            default:
+                return 'en_US';
+        }
+    };
+
     return (
         <Modal
             isOpen={isOpen}
@@ -49,10 +60,10 @@ export function PaymentModal({isOpen, onClose, onSuccess, imageCount}: PaymentMo
                             </div>
                         </div>
                         <PayPalScriptProvider options={{
-                            "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
+                            clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "",
                             currency: currency,
                             intent: "capture",
-                            locale: language === 'he' ? 'he_IL' : 'en_US'
+                            locale: getPayPalLocale(language)
                         }}>
                             <PayPalButtons
                                 style={{layout: "vertical"}}
