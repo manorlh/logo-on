@@ -6,7 +6,6 @@ import { CustomToaster } from '../components/CustomToaster';
 import JsonLd from '../components/JsonLd';
 import { AccessibilityWidget } from '../components/AccessibilityWidget';
 import { Footer } from '../components/Footer';
-import { LanguageWrapper } from '../components/LanguageWrapper';
 import { Analytics } from "@vercel/analytics/react";
 import { metadata as siteMetadata } from '../metadata';
 
@@ -97,19 +96,17 @@ export default function LangLayout({ children, params }: Props) {
         <JsonLd />
         <Analytics />
         <Providers>
-          <LanguageWrapper>
-            <header className="py-4 px-6">
-              <h1 className="text-3xl font-bold text-center">
-                {langMetadata.title.default.split('|')[0].trim()}
-              </h1>
-            </header>
-            <main className="flex-grow">
-              {children}
-            </main>
-            <Footer />
-            <CustomToaster />
-            <AccessibilityWidget />
-          </LanguageWrapper>
+          <header className="py-4 px-6">
+            <h1 className="text-3xl font-bold text-center">
+              {langMetadata.title.default.split('|')[0].trim()}
+            </h1>
+          </header>
+          <main className="flex-grow">
+            {children}
+          </main>
+          <Footer />
+          <CustomToaster />
+          <AccessibilityWidget />
         </Providers>
       </body>
     </html>

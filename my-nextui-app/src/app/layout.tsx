@@ -1,7 +1,13 @@
+import { LanguageProvider } from './LanguageContext';
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <LanguageProvider>
+      {children}
+    </LanguageProvider>
+  );
 }
