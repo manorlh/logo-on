@@ -12,22 +12,33 @@ interface LanguageContextType {
   currency: Currency;
   setLanguage: (lang: Language) => void;
   setCurrency: (curr: Currency) => void;
-  t: typeof translations.en;
+  t: any; // Using any to avoid type issues with translations
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguage] = useState<Language>('he');
-  const [currency, setCurrency] = useState<Currency>('ILS');
+export function LanguageProvider({ 
+  children, 
+  initialLanguage 
+}: { 
+  children: React.ReactNode; 
+  initialLanguage?: Language;
+}) {
+  const [language, setLanguage] = useState<Language>(initialLanguage || 'he');
+  const [currency, setCurrency] = useState<Currency>(initialLanguage === 'he' ? 'ILS' : 'USD');
 
   useEffect(() => {
-    const savedLang = Cookies.get('NEXT_LOCALE');
-    if (savedLang === 'en' || savedLang === 'he' || savedLang === 'ar') {
-      setLanguage(savedLang);
-      setCurrency(savedLang === 'he' ? 'ILS' : 'USD');
+    if (!initialLanguage) {
+      const savedLang = Cookies.get('NEXT_LOCALE');
+      if (savedLang === 'en' || savedLang === 'he' || savedLang === 'ar') {
+        setLanguage(savedLang as Language);
+        setCurrency(savedLang === 'he' ? 'ILS' : 'USD');
+      }
+    } else {
+      // If initialLanguage is provided, update the cookie to match
+      Cookies.set('NEXT_LOCALE', initialLanguage, { expires: 365 });
     }
-  }, []);
+  }, [initialLanguage]);
 
   const handleLanguageChange = (newLang: Language) => {
     setLanguage(newLang);

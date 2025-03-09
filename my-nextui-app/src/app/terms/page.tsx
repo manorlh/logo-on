@@ -1,9 +1,10 @@
-import { TermsOfUse } from '../components/TermsOfUse';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 
 export default function TermsPage() {
-  return (
-    <div className="container mx-auto p-4">
-      <TermsOfUse />
-    </div>
-  );
+  const cookieStore = cookies();
+  const savedLang = cookieStore.get('NEXT_LOCALE')?.value;
+  const lang = (savedLang === 'en' || savedLang === 'he' || savedLang === 'ar') ? savedLang : 'he';
+  
+  redirect(`/${lang}/terms`);
 } 

@@ -8,6 +8,7 @@ import { AccessibilityWidget } from '../components/AccessibilityWidget';
 import { Footer } from '../components/Footer';
 import { Analytics } from "@vercel/analytics/react";
 import { metadata as siteMetadata } from '../metadata';
+import { LanguageWrapper } from './LanguageWrapper';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -111,18 +112,15 @@ export default function LangLayout({ children, params }: Props) {
       <body className={`dark:bg-gray-900 dark:text-gray-100 min-h-screen flex flex-col ${isRTL ? 'font-arabic' : 'font-sans'}`}>
         <JsonLd />
         <Analytics />
-        <Providers>
-          <header className="py-4 px-6">
-            <h1 className="text-3xl font-bold text-center">
-              {langMetadata.title.default.split('|')[0].trim()}
-            </h1>
-          </header>
-          <main className="flex-grow">
-            {children}
-          </main>
-          <Footer />
-          <CustomToaster />
-          <AccessibilityWidget />
+        <Providers withLanguageProvider={false}>
+          <LanguageWrapper lang={params.lang}>
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <CustomToaster />
+            <AccessibilityWidget />
+          </LanguageWrapper>
         </Providers>
       </body>
     </html>

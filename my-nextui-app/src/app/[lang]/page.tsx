@@ -425,6 +425,9 @@ export default function Page({ params }: { params: { lang: string } }) {
               <ThemeToggle />
             </div>
           </div>
+          <h1 className="text-3xl font-bold text-center mt-4">
+            {t.title}
+          </h1>
         </div>
       </header>
 

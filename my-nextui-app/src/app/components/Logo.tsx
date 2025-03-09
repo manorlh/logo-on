@@ -2,13 +2,21 @@
 
 import Link from 'next/link';
 import { useLanguage } from '../LanguageContext';
+import { usePathname } from 'next/navigation';
 
 export function Logo({ className = "", size = 40 }: { className?: string, size?: number }) {
   const { language } = useLanguage();
+  const pathname = usePathname();
   const isRTL = language === 'he' || language === 'ar';
+  
+  // Extract language from URL path
+  const pathParts = pathname.split('/').filter(Boolean);
+  const urlLang = pathParts[0] === 'en' || pathParts[0] === 'he' || pathParts[0] === 'ar' 
+    ? pathParts[0] 
+    : language;
 
   return (
-    <Link href="/" className={`flex items-center gap-2 ${className} hover:opacity-80 transition-opacity`}>
+    <Link href={`/${urlLang}`} className={`flex items-center gap-2 ${className} hover:opacity-80 transition-opacity`}>
       <svg
         width={size}
         height={size}
