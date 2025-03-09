@@ -83,7 +83,7 @@ export default function LangLayout({ children, params }: Props) {
   const langMetadata = (siteMetadata[lang] || siteMetadata.en) as LangMetadata;
   
   return (
-    <html lang={params.lang} dir={isRTL ? 'rtl' : 'ltr'} className={`${isRTL ? 'rtl' : 'ltr'} dark ${inter.variable}`}>
+    <html lang={params.lang} dir={isRTL ? 'rtl' : 'ltr'} className={`${isRTL ? 'rtl' : 'ltr'} ${inter.variable}`}>
       <head>
         {siteMetadata.icons.icon.map((icon, i) => (
           <link key={i} rel="icon" {...icon} />
