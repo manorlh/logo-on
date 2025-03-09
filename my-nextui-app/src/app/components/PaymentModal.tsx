@@ -10,12 +10,25 @@ interface PaymentModalProps {
     onClose: () => void;
     onSuccess: () => void;
     imageCount: number;
+    hasUsedFreeProcessing?: boolean;
 }
 
-export function PaymentModal({isOpen, onClose, onSuccess, imageCount}: PaymentModalProps) {
+export function PaymentModal({isOpen, onClose, onSuccess, imageCount, hasUsedFreeProcessing = false}: PaymentModalProps) {
     const {language, currency, t} = useLanguage();
     const isRTL = language === 'he' || language === 'ar';
-    const amount = calculatePrice(imageCount, currency === 'ILS');
+    
+    // If user has already used free processing and is processing 1-2 images, charge $1
+    const amount = hasUsedFreeProcessing && imageCount <= 2 
+        ? (currency === 'ILS' ? 3.5 : 1) // $1 or ₪3.5 for subsequent uses of 1-2 images
+        : calculatePrice(imageCount, currency === 'ILS'); // Regular pricing for more than 2 images
+
+    // Get description text based on whether user has used free processing
+    const getDescription = () => {
+        if (hasUsedFreeProcessing) {
+            return t.payment.freeUsed;
+        }
+        return t.payment.description;
+    };
 
     const getPayPalLocale = (language: string) => {
         switch (language) {
@@ -47,7 +60,8 @@ export function PaymentModal({isOpen, onClose, onSuccess, imageCount}: PaymentMo
                 </ModalHeader>
                 <ModalBody>
                     <div className="space-y-4" dir={isRTL ? 'rtl' : 'ltr'}>
-                        <p>{t.payment.description}</p>
+                        <p>{getDescription()}</p>
+                        <p className="text-sm text-gray-600">{t.payment.firstUseFree}</p>
                         <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
                             <p className="text-lg font-semibold">{t.payment.summary}</p>
                             <div className="flex justify-between items-center mt-2">

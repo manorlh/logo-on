@@ -354,12 +354,15 @@ export default function Page({ params }: { params: { lang: string } }) {
       return;
     }
 
+    // Process images regardless of payment status
     setIsProcessing(true);
     try {
       const prepared = await prepareImages();
       setPreparedImages(prepared);
       setProcessedImages(prepared.processedImages);
-      setShowResults(true);  // Show results directly
+      
+      // Show results directly
+      setShowResults(true);
     } catch (error) {
       console.error('Error processing images:', error);
       toast.error(t.errors.processingFailed);
@@ -382,6 +385,8 @@ export default function Page({ params }: { params: { lang: string } }) {
   const handlePaymentSuccess = () => {
     setPaymentComplete(true);
     setShowPayment(false);
+    
+    // Return to results screen
     setShowResults(true);
   };
 
@@ -467,16 +472,31 @@ export default function Page({ params }: { params: { lang: string } }) {
 
         <Card className="p-4 mb-6">
           <h2 className="text-xl font-semibold mb-3">{t.payment.priceTable.title}</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="flex items-center justify-center mb-4">
+            <div className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-100 p-3 rounded-lg border border-green-200 dark:border-green-800 text-center font-medium">
+              {t.payment.firstUseFree}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-4">
             <div>
-              <p>1-2 {t.payment.priceTable.images}</p>
-              <p>3-10 {t.payment.priceTable.images}</p>
-              <p>11-20 {t.payment.priceTable.images}</p>
-              <p>21-30 {t.payment.priceTable.images}</p>
-              <p>30+ {t.payment.priceTable.images}</p>
+              <p className="font-semibold mb-2">{t.payment.priceTable.images}</p>
+              <p>1-2</p>
+              <p>3-10</p>
+              <p>11-20</p>
+              <p>21-30</p>
+              <p>30+</p>
             </div>
             <div>
+              <p className="font-semibold mb-2">{t.payment.priceTable.firstUse}</p>
               <p>{t.payment.free}</p>
+              <p>{formatPrice(currency === 'ILS' ? 10 : 3, currency === 'ILS')}</p>
+              <p>{formatPrice(currency === 'ILS' ? 15 : 4, currency === 'ILS')}</p>
+              <p>{formatPrice(currency === 'ILS' ? 20 : 5, currency === 'ILS')}</p>
+              <p>{formatPrice(currency === 'ILS' ? 40 : 10, currency === 'ILS')}</p>
+            </div>
+            <div>
+              <p className="font-semibold mb-2">{t.payment.priceTable.subsequentUse}</p>
+              <p>{formatPrice(currency === 'ILS' ? 3.5 : 1, currency === 'ILS')}</p>
               <p>{formatPrice(currency === 'ILS' ? 10 : 3, currency === 'ILS')}</p>
               <p>{formatPrice(currency === 'ILS' ? 15 : 4, currency === 'ILS')}</p>
               <p>{formatPrice(currency === 'ILS' ? 20 : 5, currency === 'ILS')}</p>
@@ -681,7 +701,7 @@ export default function Page({ params }: { params: { lang: string } }) {
         onClose={handleResultsClose}
         processedImages={processedImages}
         zipBlob={preparedImages?.zipBlob || null}
-        paymentRequired={images.length > 2 && !paymentComplete}
+        paymentRequired={images.length > 2}
         onPaymentClick={() => {
           setShowResults(false);
           setShowPayment(true);

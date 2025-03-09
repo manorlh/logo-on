@@ -59,12 +59,17 @@ export const translations = {
       summary: 'סיכום הזמנה',
       imageCount: 'מספר תמונות',
       total: 'סך הכל לתשלום',
-      free: 'חינם',
+      free: 'חינם (שימוש ראשון)',
+      freeUsed: 'כבר השתמשת בעיבוד החינמי שלך. נדרש תשלום חד פעמי להמשך השימוש.',
+      payNow: 'שלם עכשיו',
+      firstUseFree: '1-2 תמונות חינם לשימוש ראשון, שימושים נוספים יעלו 1$ בלבד',
       priceTable: {
         title: 'מחירון',
         upTo: 'עד',
         images: 'תמונות',
-        price: 'מחיר'
+        price: 'מחיר',
+        firstUse: 'שימוש ראשון',
+        subsequentUse: 'שימושים נוספים'
       }
     },
     results: {
@@ -170,12 +175,17 @@ export const translations = {
       summary: 'Order Summary',
       imageCount: 'Number of images',
       total: 'Total amount',
-      free: 'Free',
+      free: 'Free (first use)',
+      freeUsed: 'You have already used your free processing. A one-time payment is required to continue.',
+      payNow: 'Pay Now',
+      firstUseFree: '1-2 images free for first use, subsequent uses cost only $1',
       priceTable: {
         title: 'Pricing',
         upTo: 'Up to',
         images: 'images',
-        price: 'Price'
+        price: 'Price',
+        firstUse: 'First Use',
+        subsequentUse: 'Subsequent Uses'
       }
     },
     results: {
@@ -283,12 +293,17 @@ export const translations = {
       summary: 'ملخص الطلب',
       imageCount: 'عدد الصور',
       total: 'المبلغ الكلي',
-      free: 'مجاني',
+      free: 'مجاني (الاستخدام الأول)',
+      freeUsed: 'لقد استخدمت بالفعل المعالجة المجانية الخاصة بك. مطلوب دفع لمرة واحدة للاستمرار.',
+      payNow: 'دفع الآن',
+      firstUseFree: '1-2 صور مجانية للاستخدام الأول، الاستخدامات اللاحقة تكلف 1$ فقط',
       priceTable: {
         title: 'التسعير',
         upTo: 'إلى',
         images: 'الصور',
-        price: 'السعر'
+        price: 'السعر',
+        firstUse: 'الاستخدام الأول',
+        subsequentUse: 'الاستخدامات اللاحقة'
       }
     },
     results: {

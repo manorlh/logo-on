@@ -2,7 +2,7 @@
 
 import { Modal, ModalContent, ModalHeader, ModalBody, Button } from "@nextui-org/react";
 import { useLanguage } from "../LanguageContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { PaymentModal } from "./PaymentModal";
 
 interface ResultsModalProps {
@@ -39,19 +39,32 @@ export function ResultsModal({
   const { language, t } = useLanguage();
   const [showPayment, setShowPayment] = useState(false);
   const [localPaymentComplete, setLocalPaymentComplete] = useState(false);
+  const [hasUsedFreeDownload, setHasUsedFreeDownload] = useState(false);
   
   // Use either the prop or local state for payment completion
   const isPaymentComplete = paymentComplete || localPaymentComplete;
-
   const isRTL = language === 'he' || language === 'ar';
-  const needsPayment = processedImages.length > 2 && !isPaymentComplete;
+  const needsPayment = (paymentRequired || hasUsedFreeDownload) && !isPaymentComplete;
+
+  // Check if user has already used free download
+  useEffect(() => {
+    if (isOpen) {
+      const hasUsed = localStorage.getItem('hasUsedFreeProcessing') === 'true';
+      setHasUsedFreeDownload(hasUsed);
+    }
+  }, [isOpen]);
 
   const handleDownload = (url: string, filename: string) => {
-    if (needsPayment) {
+    // Allow downloading up to 2 images for free if they haven't used their free processing yet
+    if (!isPaymentComplete && !hasUsedFreeDownload && processedImages.length <= 2) {
+      // Mark that they've used their free processing after downloading
+      localStorage.setItem('hasUsedFreeProcessing', 'true');
+      setHasUsedFreeDownload(true);
+    } else if (needsPayment) {
       setShowPayment(true);
       return;
     }
-    
+
     const a = document.createElement('a');
     a.href = url;
     a.download = filename;
@@ -61,7 +74,12 @@ export function ResultsModal({
   };
 
   const handleDownloadAll = () => {
-    if (needsPayment) {
+    // Allow downloading up to 2 images for free if they haven't used their free processing yet
+    if (!isPaymentComplete && !hasUsedFreeDownload && processedImages.length <= 2) {
+      // Mark that they've used their free processing after downloading
+      localStorage.setItem('hasUsedFreeProcessing', 'true');
+      setHasUsedFreeDownload(true);
+    } else if (needsPayment) {
       setShowPayment(true);
       return;
     }
@@ -98,7 +116,7 @@ export function ResultsModal({
         }}
       >
         <ModalContent>
-          <ModalHeader className={`flex flex-col ${isRTL ? "items-start" : "items-end"}`}>
+          <ModalHeader className={`flex flex-col items-start`}>
             {t.results.title}
           </ModalHeader>
           <ModalBody className="gap-4">
@@ -115,7 +133,8 @@ export function ResultsModal({
               
               {needsPayment && (
                 <div className="p-4 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-100 rounded-lg border border-yellow-200 dark:border-yellow-800 mb-4">
-                  <p className="mb-2">{t.results.paymentRequired}</p>
+                  <p className="mb-2">{hasUsedFreeDownload ? t.payment.freeUsed : t.results.paymentRequired}</p>
+                  <p className="mb-2 text-sm">{t.payment.firstUseFree}</p>
                   <Button 
                     color="primary" 
                     onClick={onPaymentClick || (() => setShowPayment(true))}
@@ -144,9 +163,11 @@ export function ResultsModal({
                         alt={`Processed ${index + 1}`}
                         className="w-full h-auto mb-2"
                       />
-                      <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/30 text-white text-center text-xs">
-                        yourlogohere.app
-                      </div>
+                      {needsPayment && (
+                        <div className="absolute bottom-0 left-0 right-0 p-1 bg-black/30 text-white text-center text-xs">
+                          yourlogohere.app
+                        </div>
+                      )}
                     </div>
                     <Button
                       color="secondary"
@@ -168,6 +189,7 @@ export function ResultsModal({
         onClose={() => setShowPayment(false)}
         onSuccess={handlePaymentSuccess}
         imageCount={processedImages.length}
+        hasUsedFreeProcessing={hasUsedFreeDownload}
       />
     </>
   );
