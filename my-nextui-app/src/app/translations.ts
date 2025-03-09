@@ -4,7 +4,8 @@ export const translations = {
     about: {
       title: 'אודות',
       description: 'כלי זה עוזר לך להוסיף לוגו למספר תמונות בבת אחת. העלה את התמונות והלוגו שלך, מקם ושנה את גודל הלוגו לפי הצורך, וצור קובץ ZIP עם כל התמונות המעובדות.',
-      note: 'שים לב: מיקום וגודל הלוגו שתקבע יוחלו באופן עקבי על כל התמונות.'
+      note: 'שים לב: מיקום וגודל הלוגו שתקבע יוחלו באופן עקבי על כל התמונות.',
+      formats: 'פורמטים נתמכים: JPG, PNG, JPEG, WebP, AVIF'
     },
     uploadImages: {
       title: 'העלאת תמונות',
@@ -98,6 +99,15 @@ export const translations = {
       title_he: 'מיקום הלוגו',
       position_he: 'מיקום',
       drag_he: 'גרור את הלוגו או השתמש בפקדים למטה'
+    },
+    outputFormat: {
+      title: 'פורמט פלט',
+      description: 'בחר את פורמט התמונה עבור הקבצים המעובדים',
+      original: 'מקורי (שמור על פורמט המקור)',
+      jpg: 'JPG (גודל קטן, ללא שקיפות)',
+      png: 'PNG (תומך בשקיפות)',
+      webp: 'WebP (גודל קטן, תומך בשקיפות)',
+      avif: 'AVIF (גודל קטן מאוד, תמיכה מוגבלת)'
     }
   },
   en: {
@@ -105,7 +115,8 @@ export const translations = {
     about: {
       title: 'About',
       description: 'This tool helps you add your logo to multiple images at once. Upload your images and logo, position and size the logo as needed, and generate a ZIP file with all processed images.',
-      note: 'Note: The logo placement and size you set will be applied consistently across all images.'
+      note: 'Note: The logo placement and size you set will be applied consistently across all images.',
+      formats: 'Supported formats: JPG, PNG, JPEG, WebP, AVIF'
     },
     uploadImages: {
       title: 'Upload Images',
@@ -201,6 +212,15 @@ export const translations = {
       position_he: 'מיקום',
       drag_he: 'גרור את הלוגו ישירות על התמונה או השתמש בפקדים למטה',
       instructions_he: 'השתמש במחוונים או הזן ערכי פיקסלים מדויקים למיקום מדויק'
+    },
+    outputFormat: {
+      title: 'Output Format',
+      description: 'Choose the image format for processed files',
+      original: 'Original (keep source format)',
+      jpg: 'JPG (smaller size, no transparency)',
+      png: 'PNG (supports transparency)',
+      webp: 'WebP (small size, supports transparency)',
+      avif: 'AVIF (smallest size, limited support)'
     }
   },
   ar: {
@@ -208,7 +228,8 @@ export const translations = {
     about: {
       title: 'حول',
       description: 'تساعدك هذه الأداة في إضافة شعارك إلى صور متعددة في وقت واحد. قم بتحميل صورك وشعارك، وحدد موضع الشعار وحجمه حسب الحاجة.',
-      note: 'ملاحظة: سيتم تطبيق موضع الشعار وحجمه الذي تحدده بشكل متناسق على جميع الصور.'
+      note: 'ملاحظة: سيتم تطبيق موضع الشعار وحجمه الذي تحدده بشكل متناسق على جميع الصور.',
+      formats: 'الصيغ المدعومة: JPG, PNG, JPEG, WebP, AVIF'
     },
     uploadImages: {
       title: 'تحميل الصور',
@@ -304,6 +325,15 @@ export const translations = {
       position_he: 'الموقع',
       drag_he: 'أسحب الشعار مباشرة على الصورة أو استخدم التحكمات أدناه',
       instructions_he: 'استخدم المنقلات أو أدخل قيم البكسل الدقيقة لتحديد الموقع الدقيق'
+    },
+    outputFormat: {
+      title: 'صيغة الإخراج',
+      description: 'اختر صيغة الصورة للملفات المعالجة',
+      original: 'الأصلي (احتفظ بصيغة المصدر)',
+      jpg: 'JPG (حجم أصغر، بدون شفافية)',
+      png: 'PNG (يدعم الشفافية)',
+      webp: 'WebP (حجم صغير، يدعم الشفافية)',
+      avif: 'AVIF (أصغر حجم، دعم محدود)'
     }
   }
 }; 

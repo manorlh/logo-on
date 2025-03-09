@@ -15,6 +15,9 @@ interface ResultsModalProps {
     blob: Blob;
   }>;
   zipBlob: Blob | null;
+  paymentRequired?: boolean;
+  onPaymentClick?: () => void;
+  paymentComplete?: boolean;
 }
 
 interface ProcessedImage {
@@ -24,12 +27,24 @@ interface ProcessedImage {
   previewUrl: string;  // Add this for low res preview
 }
 
-export function ResultsModal({ isOpen, onClose, processedImages, zipBlob }: ResultsModalProps) {
+export function ResultsModal({ 
+  isOpen, 
+  onClose, 
+  processedImages, 
+  zipBlob,
+  paymentRequired = false,
+  onPaymentClick,
+  paymentComplete = false
+}: ResultsModalProps) {
   const { language, t } = useLanguage();
   const [showPayment, setShowPayment] = useState(false);
-  const [paymentComplete, setPaymentComplete] = useState(false);
+  const [localPaymentComplete, setLocalPaymentComplete] = useState(false);
+  
+  // Use either the prop or local state for payment completion
+  const isPaymentComplete = paymentComplete || localPaymentComplete;
+
   const isRTL = language === 'he' || language === 'ar';
-  const needsPayment = processedImages.length > 2 && !paymentComplete;
+  const needsPayment = processedImages.length > 2 && !isPaymentComplete;
 
   const handleDownload = (url: string, filename: string) => {
     if (needsPayment) {
@@ -64,7 +79,7 @@ export function ResultsModal({ isOpen, onClose, processedImages, zipBlob }: Resu
   };
 
   const handlePaymentSuccess = () => {
-    setPaymentComplete(true);
+    setLocalPaymentComplete(true);
     setShowPayment(false);
   };
 
@@ -92,20 +107,18 @@ export function ResultsModal({ isOpen, onClose, processedImages, zipBlob }: Resu
                 {t.results.warning}
               </div>
 
-              {paymentComplete && (
+              {isPaymentComplete && (
                 <div className="p-4 bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-100 rounded-lg border border-green-200 dark:border-green-800">
                   {t.results.paymentSuccess}
                 </div>
               )}
               
               {needsPayment && (
-                <div className={`p-4 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-100 rounded-lg border border-yellow-200 dark:border-yellow-800 flex items-center ${isRTL ? "flex-row-reverse" : "flex-row"} justify-between`}>
-                  <span>{t.results.paymentRequired}</span>
-                  <Button
-                    color="warning"
-                    variant="flat"
-                    size="sm"
-                    onClick={() => setShowPayment(true)}
+                <div className="p-4 bg-yellow-100 dark:bg-yellow-900/50 text-yellow-800 dark:text-yellow-100 rounded-lg border border-yellow-200 dark:border-yellow-800 mb-4">
+                  <p className="mb-2">{t.results.paymentRequired}</p>
+                  <Button 
+                    color="primary" 
+                    onClick={onPaymentClick || (() => setShowPayment(true))}
                   >
                     {t.results.payNow}
                   </Button>

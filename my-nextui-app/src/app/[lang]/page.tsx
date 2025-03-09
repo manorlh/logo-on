@@ -59,6 +59,7 @@ export default function Page({ params }: { params: { lang: string } }) {
   const [preparedImages, setPreparedImages] = useState<PreparedImages | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [canvasDimensions, setCanvasDimensions] = useState<Size>({ width: 0, height: 0 });
+  const [outputFormat, setOutputFormat] = useState<string>('original');
   const isRTL = language === 'he' || language === 'ar';
 
   // Load preview image when first image is selected
@@ -249,97 +250,118 @@ export default function Page({ params }: { params: { lang: string } }) {
     const zip = new JSZip();
     const logoImg = await createImageBitmap(logo!);
 
-    for (const image of images) {
-      // Create high quality version
-      const highResCanvas = document.createElement('canvas');
-      const highResCtx = highResCanvas.getContext('2d');
-      const img = await createImageBitmap(image);
+    for (const img of images) {
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) continue;
 
-      highResCanvas.width = img.width;
-      highResCanvas.height = img.height;
+        const bitmap = await createImageBitmap(img);
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
 
-      if (highResCtx) {
-        highResCtx.drawImage(img, 0, 0);
-        highResCtx.drawImage(
+        // Draw the original image
+        ctx.drawImage(bitmap, 0, 0);
+
+        // Calculate logo position and size relative to this image
+        const scaleX = bitmap.width / canvasDimensions.width;
+        const scaleY = bitmap.height / canvasDimensions.height;
+
+        const scaledLogoWidth = logoSize.width * scaleX;
+        const scaledLogoHeight = logoSize.height * scaleY;
+        const scaledLogoX = logoPosition.x * scaleX;
+        const scaledLogoY = logoPosition.y * scaleY;
+
+        // Draw the logo
+        ctx.drawImage(
           logoImg,
-          logoPosition.x,
-          logoPosition.y,
-          logoSize.width,
-          logoSize.height
+          scaledLogoX,
+          scaledLogoY,
+          scaledLogoWidth,
+          scaledLogoHeight
         );
 
-        // Create low resolution preview
-        const previewCanvas = document.createElement('canvas');
-        const previewCtx = previewCanvas.getContext('2d');
-        const maxPreviewSize = 400; // Max preview dimension
+        // Determine output format
+        let mimeType = img.type; // Default to original format
+        let fileExtension = img.name.split('.').pop()?.toLowerCase() || 'jpg';
         
-        // Calculate preview dimensions
-        const scale = Math.min(maxPreviewSize / img.width, maxPreviewSize / img.height);
-        previewCanvas.width = img.width * scale;
-        previewCanvas.height = img.height * scale;
-
-        if (previewCtx) {
-          // Enable image smoothing for better preview quality
-          previewCtx.imageSmoothingEnabled = true;
-          previewCtx.imageSmoothingQuality = 'medium';
-          
-          // Draw scaled down version
-          previewCtx.drawImage(highResCanvas, 0, 0, previewCanvas.width, previewCanvas.height);
+        if (outputFormat !== 'original') {
+          switch (outputFormat) {
+            case 'jpg':
+              mimeType = 'image/jpeg';
+              fileExtension = 'jpg';
+              break;
+            case 'png':
+              mimeType = 'image/png';
+              fileExtension = 'png';
+              break;
+            case 'webp':
+              mimeType = 'image/webp';
+              fileExtension = 'webp';
+              break;
+            case 'avif':
+              mimeType = 'image/avif';
+              fileExtension = 'avif';
+              break;
+          }
         }
 
-        // Get original file type
-        const mimeType = image.type || 'image/jpeg';
-        const fileExtension = mimeType.split('/')[1];
-
-        // Create high quality blob
-        const highResBlob = await new Promise<Blob>((resolve) => {
-          highResCanvas.toBlob((blob) => {
-            if (blob) resolve(blob);
-          }, mimeType, 1.0); // Use maximum quality for download
+        // Convert to blob with the selected format
+        const blob = await new Promise<Blob>((resolve) => {
+          canvas.toBlob((b) => {
+            if (b) resolve(b);
+            else resolve(new Blob()); // Fallback empty blob
+          }, mimeType);
         });
 
-        // Create low quality preview blob
-        const previewBlob = await new Promise<Blob>((resolve) => {
-          previewCanvas.toBlob((blob) => {
-            if (blob) resolve(blob);
-          }, 'image/jpeg', 0.6); // Use lower quality for preview
+        // Generate a preview URL
+        const previewUrl = URL.createObjectURL(blob);
+
+        // Create a filename with the new extension if format changed
+        const originalName = img.name;
+        const baseName = originalName.substring(0, originalName.lastIndexOf('.'));
+        const newFileName = outputFormat === 'original' 
+          ? originalName 
+          : `${baseName}.${fileExtension}`;
+
+        // Add to processed images
+        processedImgs.push({
+          name: newFileName,
+          url: previewUrl,
+          blob,
+          previewUrl
         });
 
-        const highResUrl = URL.createObjectURL(highResBlob);
-        const previewUrl = URL.createObjectURL(previewBlob);
-
-        const processedImage = {
-          name: `${image.name.split('.')[0]}-with-logo.${fileExtension}`,
-          url: highResUrl,  // Original quality for download
-          previewUrl: previewUrl,  // Low quality for preview
-          blob: highResBlob
-        };
-        
-        processedImgs.push(processedImage);
-        zip.file(processedImage.name, highResBlob);
+        // Add to zip
+        zip.file(newFileName, blob);
+      } catch (error) {
+        console.error('Error processing image:', error);
       }
     }
 
+    // Generate the zip file
     const zipBlob = await zip.generateAsync({ type: 'blob' });
-    setPreparedImages({ processedImages: processedImgs, zipBlob });
+
+    return {
+      processedImages: processedImgs,
+      zipBlob
+    };
   };
 
   const processImages = async () => {
-    if (!logo) {
+    if (!logo || images.length === 0) {
       toast.error(t.errors.noLogo);
-      return;
-    }
-    
-    if (images.length === 0) {
-      toast.error(t.errors.noImages);
       return;
     }
 
     setIsProcessing(true);
     try {
-      await prepareImages();
+      const prepared = await prepareImages();
+      setPreparedImages(prepared);
+      setProcessedImages(prepared.processedImages);
       setShowResults(true);  // Show results directly
     } catch (error) {
+      console.error('Error processing images:', error);
       toast.error(t.errors.processingFailed);
     } finally {
       setIsProcessing(false);
@@ -435,6 +457,7 @@ export default function Page({ params }: { params: { lang: string } }) {
         <Card className="p-4 mb-6">
           <h2 className="text-xl font-semibold mb-3">{t.about.title}</h2>
           <p className="mb-4">{t.about.description}</p>
+          <p className="mb-4">{t.about.formats}</p>
           <div className="p-3 bg-blue-50 rounded-lg">
             <p className="text-sm text-blue-700">
               <strong>{t.about.note}</strong>
@@ -462,7 +485,7 @@ export default function Page({ params }: { params: { lang: string } }) {
           </div>
         </Card>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <Card className="p-4">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl">{t.uploadImages.title}</h2>
@@ -522,73 +545,148 @@ export default function Page({ params }: { params: { lang: string } }) {
               <input {...getLogoInputProps()} />
               <p>{t.uploadLogo.dropzone}</p>
             </div>
-            {logo && <p className="mt-2 text-sm">{logo.name}</p>}
+            {logo && (
+              <div className="mt-4 text-sm">
+                {logo.name}
+              </div>
+            )}
           </Card>
         </div>
 
-        {previewUrl && logoPreviewUrl && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+        {logo && images.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <Card className="p-4">
-              <h2 className="text-xl mb-2">{t.logoPlacement.title}</h2>
-              <div className="mb-3 text-sm text-gray-600">
-                <p>{t.logoPlacement.drag}</p>
-                <p>{t.logoPlacement.preview}</p>
-              </div>
-              <div className="relative">
+              <h2 className="text-xl mb-4">{t.logoPlacement.title}</h2>
+              <p className="mb-2 text-sm text-gray-600">{t.logoPlacement.drag}</p>
+              <div className="relative border rounded overflow-hidden">
                 <canvas
                   ref={canvasRef}
-                  className="border border-gray-300 w-full h-auto cursor-move max-h-[400px] object-contain"
+                  className="w-full h-auto cursor-move"
                   onMouseDown={handleCanvasMouseDown}
                   onMouseMove={handleCanvasMouseMove}
                   onMouseUp={handleCanvasMouseUp}
                   onMouseLeave={handleCanvasMouseUp}
                 />
               </div>
+              <p className="mt-2 text-sm text-gray-600">{t.logoPlacement.preview}</p>
             </Card>
 
             <Card className="p-4">
-              <LogoControls
-                logoSize={logoSize}
-                logoPosition={logoPosition}
-                maintainAspectRatio={maintainAspectRatio}
-                onSizeChange={handleSizeChange}
-                onPositionChange={(value, axis) => {
-                  const newPosition = {
-                    ...logoPosition,
-                    [axis]: value
-                  };
-                  setLogoPosition(newPosition);
-                }}
-                onAspectRatioChange={setMaintainAspectRatio}
-                maxWidth={canvasDimensions.width}
-                maxHeight={canvasDimensions.height}
-              />
+              <h2 className="text-xl mb-4">{t.logoSize.title}</h2>
+              <p className="mb-2 text-sm text-gray-600">{t.logoSize.sliders}</p>
+              
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span>{t.logoSize.width}</span>
+                  <Input
+                    type="number"
+                    value={logoSize.width.toString()}
+                    onChange={(e) => handleSizeChange(parseInt(e.target.value) || 1, 'width')}
+                    className="w-24"
+                    min="1"
+                  />
+                </div>
+                <Slider
+                  value={logoSize.width}
+                  onChange={(value) => handleSizeChange(value as number, 'width')}
+                  minValue={10}
+                  maxValue={canvasDimensions.width}
+                  step={1}
+                  className="mb-4"
+                />
+              </div>
+              
+              <div className="mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span>{t.logoSize.height}</span>
+                  <Input
+                    type="number"
+                    value={logoSize.height.toString()}
+                    onChange={(e) => handleSizeChange(parseInt(e.target.value) || 1, 'height')}
+                    className="w-24"
+                    min="1"
+                  />
+                </div>
+                <Slider
+                  value={logoSize.height}
+                  onChange={(value) => handleSizeChange(value as number, 'height')}
+                  minValue={10}
+                  maxValue={canvasDimensions.height}
+                  step={1}
+                  className="mb-4"
+                />
+              </div>
+              
+              <div className="flex items-center">
+                <Switch
+                  checked={maintainAspectRatio}
+                  onChange={() => setMaintainAspectRatio(!maintainAspectRatio)}
+                />
+                <span className="ml-2">{t.logoSize.maintainRatio}</span>
+              </div>
             </Card>
           </div>
         )}
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <Card className="p-4">
+            <h2 className="text-xl font-semibold mb-3">{t.outputFormat.title}</h2>
+            <p className="mb-4 text-sm text-gray-600">{t.outputFormat.description}</p>
+            <Select
+              label={t.outputFormat.title}
+              value={outputFormat}
+              onChange={(e) => setOutputFormat(e.target.value)}
+              className="mb-4"
+            >
+              <SelectItem key="original" value="original">
+                {t.outputFormat.original}
+              </SelectItem>
+              <SelectItem key="jpg" value="jpg">
+                {t.outputFormat.jpg}
+              </SelectItem>
+              <SelectItem key="png" value="png">
+                {t.outputFormat.png}
+              </SelectItem>
+              <SelectItem key="webp" value="webp">
+                {t.outputFormat.webp}
+              </SelectItem>
+              <SelectItem key="avif" value="avif">
+                {t.outputFormat.avif}
+              </SelectItem>
+            </Select>
+          </Card>
+        </div>
+
         <Button
           color="primary"
-          className="mt-4"
+          size="lg"
+          className="w-full"
           onClick={processImages}
           isLoading={isProcessing}
-          disabled={isProcessing}
+          isDisabled={!logo || images.length === 0 || isProcessing}
         >
           {isProcessing ? t.processing : t.generate}
         </Button>
       </div>
+
       <PaymentModal
         isOpen={showPayment}
         onClose={() => setShowPayment(false)}
         onSuccess={handlePaymentSuccess}
         imageCount={images.length}
       />
-      
+
       <ResultsModal
         isOpen={showResults}
         onClose={handleResultsClose}
-        processedImages={preparedImages?.processedImages || []}
+        processedImages={processedImages}
         zipBlob={preparedImages?.zipBlob || null}
+        paymentRequired={images.length > 2 && !paymentComplete}
+        onPaymentClick={() => {
+          setShowResults(false);
+          setShowPayment(true);
+        }}
+        paymentComplete={paymentComplete}
       />
     </div>
   );
