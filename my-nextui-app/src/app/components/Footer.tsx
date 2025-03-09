@@ -18,6 +18,9 @@ export function Footer() {
           </Link>
           <span>{t.footer.rights}</span>
         </div>
+        <div className="flex justify-center items-center mt-2 text-sm text-gray-600">
+          <span>{t.footer.paypal}</span>
+        </div>
       </div>
     </footer>
   );

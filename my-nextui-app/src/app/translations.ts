@@ -49,7 +49,8 @@ export const translations = {
     footer: {
       terms: 'תנאי שימוש',
       privacy: 'מדיניות פרטיות',
-      rights: '© 2024 כל הזכויות שמורות'
+      rights: '© 2024 כל הזכויות שמורות',
+      paypal: 'אנו מעבדים תשלומים באמצעות PayPal'
     },
     payment: {
       title: 'תשלום',
@@ -149,7 +150,8 @@ export const translations = {
     footer: {
       terms: 'Terms of Use',
       privacy: 'Privacy Policy',
-      rights: '© 2024 All Rights Reserved'
+      rights: '© 2024 All Rights Reserved',
+      paypal: 'We process payments via PayPal'
     },
     payment: {
       title: 'Payment',
@@ -251,7 +253,8 @@ export const translations = {
     footer: {
       terms: 'شروط الاستخدام',
       privacy: 'سياسة الخصوصية',
-      rights: '© 2024 جميع الحقوق محفوظة'
+      rights: '© 2024 جميع الحقوق محفوظة',
+      paypal: 'نحن نعالج المدفوعات عبر PayPal'
     },
     payment: {
       title: 'الدفع',
